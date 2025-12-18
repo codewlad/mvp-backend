@@ -1,9 +1,6 @@
 import express from "express";
 import cors from "cors";
 import pkg from "pg";
-import dns from "dns";
-
-dns.setDefaultResultOrder("ipv4first");
 
 const { Pool } = pkg;
 
@@ -14,6 +11,10 @@ app.use(express.json());
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false },
+});
+
+app.get("/", (req, res) => {
+  res.send("API rodando 🚀");
 });
 
 app.get("/users", async (req, res) => {
@@ -29,4 +30,4 @@ app.get("/users", async (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log("Server running on port", PORT));
+app.listen(PORT, () => console.log("Backend rodando na porta", PORT));
