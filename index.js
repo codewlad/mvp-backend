@@ -11,10 +11,11 @@ app.use(express.json());
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false },
+  family: 4, // ⬅️ FORÇA IPv4
 });
 
 app.get("/", (req, res) => {
-  res.send("API rodando 🚀");
+  res.status(200).send("API rodando 🚀");
 });
 
 app.get("/users", async (req, res) => {
@@ -29,10 +30,8 @@ app.get("/users", async (req, res) => {
   }
 });
 
-// ⚠️ PORTA DO RAILWAY
 const PORT = process.env.PORT;
 
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`🚀 Backend rodando na porta ${PORT}`);
-  console.log("DB HOST:", new URL(process.env.DATABASE_URL).hostname);
 });
