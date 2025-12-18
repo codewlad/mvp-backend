@@ -24,8 +24,15 @@ app.get("/users", async (req, res) => {
     );
     res.json(result.rows);
   } catch (err) {
-    console.error("Erro /users:", err);
-    res.status(500).json({ error: err.message });
+    console.error("ERRO COMPLETO:", err);
+    console.error("ERRO STRING:", JSON.stringify(err, null, 2));
+    console.error("ERRO MESSAGE:", err.message);
+    console.error("ERRO CODE:", err.code);
+
+    res.status(500).json({
+      error: err.message,
+      code: err.code,
+    });
   }
 });
 
