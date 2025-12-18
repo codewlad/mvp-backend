@@ -9,7 +9,7 @@ app.use(cors());
 app.use(express.json());
 
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL3,
+  connectionString: process.env.DATABASE_URL5,
   ssl: { rejectUnauthorized: false },
 });
 
@@ -18,25 +18,9 @@ app.get("/", (req, res) => {
 });
 
 app.get("/users", async (req, res) => {
-  try {
-    const result = await pool.query(
-      "select id, name, email, created_at from public.users order by id"
-    );
-    res.json(result.rows);
-  } catch (err) {
-    console.error("ERRO COMPLETO:", err);
-    console.error("ERRO STRING:", JSON.stringify(err, null, 2));
-    console.error("ERRO MESSAGE:", err.message);
-    console.error("ERRO CODE:", err.code);
-
-    res.status(500).json({
-      error: err.message,
-      code: err.code,
-    });
-  }
+  const result = await pool.query("select * from users");
+  res.json(result.rows);
 });
 
 const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
-  console.log(`🚀 Backend rodando na porta ${PORT}`);
-});
+app.listen(PORT, () => console.log("Backend rodando na porta", PORT));
