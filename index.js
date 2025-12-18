@@ -1,6 +1,9 @@
 import express from "express";
 import cors from "cors";
 import pkg from "pg";
+import dns from "dns";
+
+dns.setDefaultResultOrder("ipv4first");
 
 const { Pool } = pkg;
 
@@ -13,10 +16,6 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false },
 });
 
-app.get("/health", (req, res) => {
-  res.json({ status: "ok" });
-});
-
 app.get("/users", async (req, res) => {
   try {
     const result = await pool.query(
@@ -25,7 +24,7 @@ app.get("/users", async (req, res) => {
     res.json(result.rows);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Erro ao buscar usuários" });
+    res.status(500).json({ error: err.message });
   }
 });
 
