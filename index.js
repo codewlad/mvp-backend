@@ -1,6 +1,6 @@
 import express from "express";
-import cors from "cors";
 import pkg from "pg";
+import cors from "cors";
 
 const { Pool } = pkg;
 
@@ -11,11 +11,10 @@ app.use(express.json());
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false },
-  family: 4, // ⬅️ FORÇA IPv4
 });
 
 app.get("/", (req, res) => {
-  res.status(200).send("API rodando 🚀");
+  res.send("Backend funcionando 🚀");
 });
 
 app.get("/users", async (req, res) => {
@@ -25,13 +24,12 @@ app.get("/users", async (req, res) => {
     );
     res.json(result.rows);
   } catch (err) {
-    console.error(err);
+    console.error("Erro /users:", err);
     res.status(500).json({ error: err.message });
   }
 });
 
-const PORT = process.env.PORT;
-
-app.listen(PORT, "0.0.0.0", () => {
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => {
   console.log(`🚀 Backend rodando na porta ${PORT}`);
 });
